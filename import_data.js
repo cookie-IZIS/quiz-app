@@ -48,7 +48,7 @@ async function importData() {
                 // ここで全てのCSVデータが読み込まれるのを待ってからDBに挿入
                 for (const row of results) {
                     try {
-                        const answerValue = (row.answer === 'true' || row.answer === '1'); // CSVの真偽値をBooleanに変換
+                        const answerValue = (parseInt(row.answer, 10) === 1); // CSVの真偽値をBooleanに変換
                         await client.query(
                             `INSERT INTO questions (id, question, answer, explanation, genre, year) VALUES ($1, $2, $3, $4, $5, $6)`,
                             [parseInt(row.id, 10), row.question, answerValue, row.explanation, row.genre, parseInt(row.year, 10)]
