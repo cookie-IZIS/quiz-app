@@ -3,41 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>一問一答クイズアプリ</title>
+    <title>クイズアプリ</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="app">
-        <section id="start-screen" class="screen active">
-            <h1>クイズアプリへようこそ！</h1>
-            <p>ボタンを押してクイズを始めよう。</p>
+    <div class="container">
+        <h1>クイズアプリ</h1>
+
+        <div id="start-screen" class="screen">
+            <p>クイズへようこそ！</p>
             <button id="start-button">クイズ開始</button>
-            <div class="filter-options">
-                <button id="filter-year-button">出題年で絞り込む</button>
-                <button id="filter-genre-button">ジャンルで絞り込む</button>
+        </div>
+
+        <div id="quiz-screen" class="screen hidden">
+            <h2 id="question-text"></h2>
+            <div class="buttons">
+                <button id="true-button">はい</button>
+                <button id="false-button">いいえ</button>
             </div>
-            <button id="reset-button">学習状況をリセット</button>
-        </section>
+            <p id="feedback-text" class="feedback"></p>
+            <button id="next-button" class="hidden">次へ</button>
+        </div>
 
-        <section id="quiz-screen" class="screen">
-            <h2 id="question-text">ここに問題文が表示されます。</h2>
-            <div class="quiz-buttons">
-                <button id="true-button">○</button>
-                <button id="false-button">×</button>
-            </div>
-            <button id="restart-button">初期画面に戻る</button>
-        </section>
-
-        <section id="explanation-screen" class="screen">
-            <h2 id="result-text"></h2> <p id="feedback-text"></p> <button id="next-button">次の設問へ</button>
-            <button id="restart-button">初期画面に戻る</button>
-        </section>
-
-        <section id="result-screen" class="screen">
-            <h2>クイズ終了！</h2>
-            <p>お疲れ様でした。</p>
-            <p id="score-text"></p> <button id="restart-button">初期画面に戻る</button>
-        </section>
+        <div id="result-screen" class="screen hidden">
+            <h2>結果</h2>
+            <p>あなたのスコア: <span id="score-display"></span></p>
+            <button id="restart-button">もう一度プレイ</button>
+        </div>
     </div>
 
     <script src="script.js" defer></script>
