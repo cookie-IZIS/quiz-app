@@ -47,6 +47,10 @@ async function importData() {
             .on('end', async () => {
                 // ここで全てのCSVデータが読み込まれるのを待ってからDBに挿入
                 for (const row of results) {
+                    console.log('Original Row Data:', row); // CSVから読み込んだ生のデータ
+                    console.log('Parsed ID:', parseInt(row.id, 10)); // IDを数値変換した結果
+                    console.log('Parsed Year:', parseInt(row.year, 10)); // Yearを数値変換した結果
+                    console.log('Parsed Answer:', (parseInt(row.answer, 10) === 1)); // Answerを真偽値変換した結果
                     try {
                         const answerValue = (parseInt(row.answer, 10) === 1); // CSVの真偽値をBooleanに変換
                         await client.query(
