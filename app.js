@@ -9,6 +9,11 @@ const port = process.env.PORT || 3000; // Renderが指定するポートを使�
 // CORSを有効にする設定
 app.use(cors());
 
+// 静的ファイル（HTML, CSS, JavaScriptなど）を配信するための設定
+// これにより、ブラウザが /style.css や /script.js にアクセスしたときに
+// 自動的にquiz-appフォルダ内の対応するファイルを返します。
+app.use(express.static(__dirname));
+
 // index.html ファイルを配信するための設定
 // ブラウザが http://localhost:3000/ にアクセスしたときに、
 // このプロジェクトフォルダ内のindex.htmlを返すようにします。
