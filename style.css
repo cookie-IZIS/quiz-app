@@ -7,6 +7,7 @@ body {
     margin: 0;
     background-color: #f4f4f4;
     color: #333;
+    line-height: 1.6;
 }
 
 .container {
@@ -16,7 +17,8 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 90%;
-    max-width: 500px;
+    max-width: 600px; /* 少し広げて解説文を読みやすく */
+    box-sizing: border-box; /* paddingが幅に含まれるように */
 }
 
 h1, h2 {
@@ -38,6 +40,7 @@ button {
     font-size: 1em;
     margin: 5px;
     transition: background-color 0.3s ease;
+    min-width: 100px; /* ボタンの幅を揃える */
 }
 
 button:hover {
@@ -51,22 +54,46 @@ button:disabled {
 
 .buttons {
     margin-top: 20px;
+    display: flex; /* ボタンを横並びに */
+    justify-content: center; /* 中央揃え */
+    gap: 15px; /* ボタン間のスペース */
+}
+
+.answer-button {
+    font-size: 1.5em; /* 〇✕ボタンを大きく */
+    padding: 15px 30px;
 }
 
 #question-text {
-    font-size: 1.2em;
-    margin-bottom: 20px;
-    min-height: 60px; /* テキストがないときにレイアウトが崩れないように */
+    font-size: 1.4em; /* 問題文を大きく */
+    margin-bottom: 25px;
+    min-height: 80px; /* テキストがないときにレイアウトが崩れないように */
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    background-color: #e9f5ff; /* 問題文の背景色 */
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .feedback {
     font-weight: bold;
     margin-top: 15px;
-    min-height: 20px; /* レイアウトが崩れないように */
+    min-height: 25px; /* レイアウトが崩れないように */
+    font-size: 1.1em;
+}
+
+.explanation {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f0f8ff; /* 解説文の背景色 */
+    border-left: 5px solid #007bff; /* 左側のボーダーで目立たせる */
+    text-align: left;
+    font-size: 0.95em;
+    color: #555;
+    border-radius: 4px;
 }
 
 /* 要素を非表示にするためのユーティリティクラス */

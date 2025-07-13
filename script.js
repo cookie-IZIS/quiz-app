@@ -13,10 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const trueButton = document.getElementById('true-button');
     const falseButton = document.getElementById('false-button');
     const feedbackText = document.getElementById('feedback-text');
+    const explanationText = document.getElementById('explanation-text'); // 解説文表示用要素
     const nextButton = document.getElementById('next-button');
 
     const scoreDisplay = document.getElementById('score-display');
+    const totalQuestionsDisplay = document.getElementById('total-questions-display'); // 追加
     const restartButton = document.getElementById('restart-button');
+    const backToStartButton = document.getElementById('back-to-start-button'); // 追加
 
     // 初期表示：スタート画面のみ表示
     startScreen.classList.remove('hidden');
@@ -26,99 +29,107 @@ document.addEventListener('DOMContentLoaded', () => {
     // APIからクイズデータを読み込む関数
     async function loadQuestions() {
         try {
-            // APIのエンドポイントは相対パスで指定 (Render上で正しく動作するため)
             const response = await fetch('/api/questions'); 
             
-            // HTTPエラー（例: 404 Not Found, 500 Internal Server Error）をチェック
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             
-            const data = await response.json(); // レスポンスをJSONとしてパース
+            const data = await response.json();
 
-            // データが'success'メッセージと'data'配列を含んでいるか確認
-            if (data.message === 'success' && Array.isArray(data.data)) {
-                questions = data.data; // 取得した問題データを格納
-                console.log('クイズデータを正常に読み込みました:', questions); // デバッグ用ログ
+            if (data.message === 'success' && Array.isArray(data.data) && data.data.length > 0) {
+                questions = data.data; 
+                console.log('クイズデータを正常に読み込みました:', questions);
+                totalQuestionsDisplay.textContent = questions.length; // 全問題数を表示
             } else {
                 throw new Error('API response format is incorrect or data is empty.');
             }
 
         } catch (error) {
             console.error('クイズデータの読み込みエラー:', error);
-            // ユーザーにエラーメッセージを表示
-            // question-text要素が存在することを確認してからinnerHTMLを設定
-            if(questionText) { // nullチェックを追加
+            if(questionText) { 
                 questionText.textContent = 'クイズデータの読み込みに失敗しました。サーバーが起動しているか確認してください。';
+                questionText.style.color = 'red'; // エラーメッセージを赤く表示
             } else {
-                // エラー表示用の要素がなければ、単純にアラート
                 alert('クイズデータの読み込みに失敗しました。');
             }
-            if(startButton) { // nullチェックを追加
-                startButton.disabled = true; // 致命的なエラーのため、スタートボタンを無効化
+            if(startButton) {
+                startButton.disabled = true;
             }
         }
     }
 
     // クイズを開始する関数
     function startQuiz() {
-        // 問題が読み込まれていない場合はアラートを出し、処理を中断
         if (questions.length === 0) {
             alert('問題が読み込まれていません。ページをリロードするか、後でもう一度お試しください。');
             return;
         }
-        currentQuestionIndex = 0; // 現在の問題インデックスをリセット
-        score = 0; // スコアをリセット
+        currentQuestionIndex = 0;
+        score = 0;
 
-        // 画面の切り替え
-        startScreen.classList.add('hidden'); // スタート画面を非表示
-        quizScreen.classList.remove('hidden'); // クイズ画面を表示
-        resultScreen.classList.add('hidden'); // 結果画面を非表示
+        startScreen.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        resultScreen.classList.add('hidden');
 
-        displayQuestion(); // 最初の問題を表示
+        displayQuestion();
     }
 
     // 問題を表示する関数
     function displayQuestion() {
         if (currentQuestionIndex < questions.length) {
             const question = questions[currentQuestionIndex];
-            questionText.textContent = question.question; // 問題文を設定
-            feedbackText.textContent = ''; // フィードバックテキストをクリア
-            feedbackText.style.color = ''; // フィードバックテキストの色をリセット
-            nextButton.classList.add('hidden'); // 「次へ」ボタンを非表示
-            trueButton.disabled = false; // 回答ボタンを有効化
+            questionText.textContent = question.question;
+            feedbackText.textContent = '';
+            feedbackText.style.color = '';
+            explanationText.textContent = ''; // 解説文をクリア
+            explanationText.classList.add('hidden'); // 解説文を非表示
+            nextButton.classList.add('hidden');
+            trueButton.disabled = false;
             falseButton.disabled = false;
         } else {
-            showResult(); // 全問終了したら結果表示
+            showResult();
         }
     }
 
     // 回答をチェックする関数
     function checkAnswer(userAnswer) {
         const currentQuestion = questions[currentQuestionIndex];
-        // PostgreSQLのBOOLEAN型はJavaScriptではtrue/falseになる
         const correctAnswer = currentQuestion.answer; 
+
+        // デバッグ用ログ (必要なければ後で削除)
+        console.log('ユーザーの回答 (userAnswer):', userAnswer, typeof userAnswer);
+        console.log('正しい答え (correctAnswer):', correctAnswer, typeof correctAnswer);
 
         if (userAnswer === correctAnswer) {
             feedbackText.textContent = '正解！';
             feedbackText.style.color = 'green';
             score++;
         } else {
-            // 正しい答えを日本語で表示
-            const correctText = correctAnswer ? 'はい' : 'いいえ';
+            const correctText = correctAnswer ? '〇' : '✕'; // 〇✕で表示
             feedbackText.textContent = `不正解！ 正しい答えは「${correctText}」です。`;
             feedbackText.style.color = 'red';
         }
-        trueButton.disabled = true; // 回答ボタンを無効化
+        
+        // 解説文の表示
+        if (currentQuestion.explanation) {
+            explanationText.textContent = `【解説】${currentQuestion.explanation}`;
+            explanationText.classList.remove('hidden');
+        } else {
+            explanationText.textContent = '';
+            explanationText.classList.add('hidden');
+        }
+
+        trueButton.disabled = true;
         falseButton.disabled = true;
-        nextButton.classList.remove('hidden'); // 「次へ」ボタンを表示
+        nextButton.classList.remove('hidden'); // 次へボタンを表示
     }
 
     // 結果画面を表示する関数
     function showResult() {
-        quizScreen.classList.add('hidden'); // クイズ画面を非表示
-        resultScreen.classList.remove('hidden'); // 結果画面を表示
-        scoreDisplay.textContent = `${score} / ${questions.length}`; // スコアを表示
+        quizScreen.classList.add('hidden');
+        resultScreen.classList.remove('hidden');
+        scoreDisplay.textContent = score; // スコアのみ表示
     }
 
     // イベントリスナーの設定
@@ -126,11 +137,19 @@ document.addEventListener('DOMContentLoaded', () => {
     trueButton.addEventListener('click', () => checkAnswer(true));
     falseButton.addEventListener('click', () => checkAnswer(false));
     nextButton.addEventListener('click', () => {
-        currentQuestionIndex++; // 次の問題へ
-        displayQuestion(); // 次の問題を表示
+        currentQuestionIndex++;
+        displayQuestion();
     });
-    restartButton.addEventListener('click', startQuiz); // 「もう一度プレイ」ボタン
+    restartButton.addEventListener('click', startQuiz);
+    // 「最初の画面に戻る」ボタンのイベントリスナー
+    backToStartButton.addEventListener('click', () => {
+        resultScreen.classList.add('hidden');
+        startScreen.classList.remove('hidden');
+        // 必要に応じて、問題数を再ロードするloadQuestions()を呼ぶことも可能だが、
+        // 今回はそのままにしておく (すでにロード済みのため)
+    });
 
-    // ページ読み込み時にクイズデータを非同期でロード
+
+    // ページ読み込み時にクイズデータをロード
     loadQuestions();
 });

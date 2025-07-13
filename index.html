@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>クイズアプリ</h1>
+        <h1>宅建一問一答</h1>
 
         <div id="start-screen" class="screen">
             <p>クイズへようこそ！</p>
@@ -18,18 +18,18 @@
         <div id="quiz-screen" class="screen hidden">
             <h2 id="question-text"></h2>
             <div class="buttons">
-                <button id="true-button">はい</button>
-                <button id="false-button">いいえ</button>
+                <button id="true-button" class="answer-button">〇</button>
+                <button id="false-button" class="answer-button">✕</button>
             </div>
             <p id="feedback-text" class="feedback"></p>
-            <button id="next-button" class="hidden">次へ</button>
+            <p id="explanation-text" class="explanation hidden"></p> <button id="next-button" class="hidden">次へ</button>
         </div>
 
         <div id="result-screen" class="screen hidden">
             <h2>結果</h2>
-            <p>あなたのスコア: <span id="score-display"></span></p>
+            <p>あなたのスコア: <span id="score-display"></span> / <span id="total-questions-display"></span></p>
             <button id="restart-button">もう一度プレイ</button>
-        </div>
+            <button id="back-to-start-button">最初の画面に戻る</button> </div>
     </div>
 
     <script src="script.js" defer></script>
