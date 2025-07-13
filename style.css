@@ -1,0 +1,139 @@
+/* 全体の基本的なスタイル */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+#app {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    position: relative; /* 子要素の絶対配置の基準にする */
+    overflow: hidden; /* はみ出した子要素を隠す */
+}
+
+/* 各画面のスタイル */
+.screen {
+    position: absolute; /* 親要素の#appを基準に配置 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* 最初は透明 */
+    visibility: hidden; /* 見えないようにする */
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out; /* スムーズな切り替え */
+    padding: 30px; /* #appのpaddingを考慮 */
+    box-sizing: border-box; /* paddingを含めてwidth/heightを計算 */
+}
+
+.screen.active {
+    opacity: 1; /* 表示するときは不透明に */
+    visibility: visible; /* 見えるようにする */
+    position: static; /* activeな要素だけ通常の配置に戻す */
+}
+
+/* 見出しのスタイル */
+h1, h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+/* 段落のスタイル */
+p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+/* ボタンの基本的なスタイル */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    margin: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    min-width: 150px; /* ボタンの最小幅 */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* 特殊なボタンのスタイル */
+#answer-maru-button {
+    background-color: #28a745; /* 緑色 */
+}
+#answer-maru-button:hover {
+    background-color: #218838;
+}
+
+#answer-batsu-button {
+    background-color: #dc3545; /* 赤色 */
+}
+#answer-batsu-button:hover {
+    background-color: #c82333;
+}
+
+.quiz-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.filter-options {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.filter-options button {
+    background-color: #6c757d;
+}
+.filter-options button:hover {
+    background-color: #5a6268;
+}
+
+/* 設問テキストのスタイル */
+#question-text {
+    font-size: 24px;
+    font-weight: bold;
+    min-height: 80px; /* 問題文の高さが揃うように */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* 結果テキストのスタイル */
+#result-text {
+    font-size: 28px;
+    font-weight: bold;
+    color: #007bff; /* デフォルトの色 */
+}
+
+#explanation-text {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+/* 画面切り替えの際に、activeでない画面を隠すためのスタイル */
+/* JavaScriptでactiveクラスを切り替えることで表示/非表示を制御します */
