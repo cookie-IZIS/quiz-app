@@ -137,3 +137,10 @@ button:hover {
 
 /* 画面切り替えの際に、activeでない画面を隠すためのスタイル */
 /* JavaScriptでactiveクラスを切り替えることで表示/非表示を制御します */
+
+/* --- その他のCSSスタイルの下 --- */
+
+/* 要素を非表示にするためのユーティリティクラス */
+.hidden {
+    display: none !important;
+}
